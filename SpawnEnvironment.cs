@@ -5,10 +5,10 @@ using UnityEngine;
 public class SpawnEnvironment : MonoBehaviour
 {
     // Variable used for creation of the forest.
-    private int forestSize = 20; // Number of trees.
+    public int forestSize = 25; // Number of trees.
 
     // Variables used for creation of the pyramid.
-    public int stonesRequired;
+    public int stonesRequired = 55;
     public GameObject[] stones;
     private float offset;
     private float height = 0.5f;
@@ -30,7 +30,7 @@ public class SpawnEnvironment : MonoBehaviour
 
         ground.transform.localScale = new Vector3(5.0f, ground.transform.localScale.y, 5.0f); // Set its scale.
 
-        ground.GetComponent<Renderer>().material.color = Color.red; // Set its color.
+        ground.GetComponent<Renderer>().material.color = new Color(Random.Range(0.35f, 1.0f), 0f, 0f); // Set its color.
 
         ground.name = "Ground"; // Set its name.
     }
@@ -48,11 +48,16 @@ public class SpawnEnvironment : MonoBehaviour
 
             GameObject tree = GameObject.CreatePrimitive(PrimitiveType.Cylinder); // Spawn the tree.
 
-            tree.transform.localScale = new Vector3(Random.Range(0.2f, 0.5f), Random.Range(0.5f, 1.5f),Random.Range(0.2f, 0.5f)); // Set the scale.
+            tree.transform.localScale = new Vector3(Random.Range(0.15f, 0.85f), Random.Range(0.35f, 0.8f), Random.Range(0.15f, 0.85f)); // Set the scale.
+            
+            // Create temp variable that stores the tree's scale in order to get an accurate y position, so the tree does not protrude through the ground.
+            float groundZero = tree.transform.localScale.y;
 
-            tree.transform.position = new Vector3(Random.Range(-20.0f, -15.0f), 0f, Random.Range(-20.0f, -15.0f)); // Set the position.
+            // Set the position, but for the y set it to the variable created above because scale influences the tree's y position or ground zero.
+            // For example, if all trees are set to zero on the y, trees that have a high y scale will protrude through the bottom of the ground.
+            tree.transform.position = new Vector3(Random.Range(-20.0f, -15.5f), groundZero, Random.Range(-20.0f, -15.5f));
 
-            tree.GetComponent<Renderer>().material.color = new Color(0f, Random.Range(.3f, 1.0f), 0f); // Change the color of the tree.
+            tree.GetComponent<Renderer>().material.color = new Color(0f, Random.Range(0.2f, 1.0f), 0f); // Change the color of the tree.
 
             tree.name = "Tree"; // Name the newly created cylinders.
 
