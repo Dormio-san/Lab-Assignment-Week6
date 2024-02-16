@@ -10,9 +10,9 @@ public class SpawnEnvironment : MonoBehaviour
     //-------------------------------------------
     // Variables used for creation of the pyramid.
     //Length of pyramid in cubes
-    public int lengthOfPyramid = 15;
+    public int lengthOfPyramid = 9;
     //Height of pyramid in cubes
-    public int heightOfPyramid = 6;
+    public int heightOfPyramid = 5;
 
     //This makes the pyramid center itself
     private int offset = 0;
@@ -61,7 +61,7 @@ public class SpawnEnvironment : MonoBehaviour
 
             // Set the position, but for the y set it to the variable created above because scale influences the tree's y position or ground zero.
             // For example, if all trees are set to zero on the y, trees that have a high y scale will protrude through the bottom of the ground.
-            tree.transform.position = new Vector3(Random.Range(-20.0f, -15.5f), groundZero, Random.Range(-20.0f, -15.5f));
+            tree.transform.position = new Vector3(Random.Range(-11.5f, -5f), groundZero, Random.Range(0.5f, 6.5f));
 
             tree.GetComponent<Renderer>().material.color = new Color(0f, Random.Range(0.2f, 1.0f), 0f); // Change the color of the tree.
 
