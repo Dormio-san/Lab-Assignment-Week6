@@ -7,12 +7,18 @@ public class SpawnEnvironment : MonoBehaviour
     // Variable used for creation of the forest.
     public int forestSize = 25; // Number of trees.
 
+    //-------------------------------------------
     // Variables used for creation of the pyramid.
-    public int stonesRequired = 55;
-    public GameObject[] stones;
-    private float offset;
-    private float height = 0.5f;
-    private int stopInfiniteLoop;
+    //Length of pyramid in cubes
+    public int lengthOfPyramid = 15;
+    //Height of pyramid in cubes
+    public int heightOfPyramid = 6;
+
+    //This makes the pyramid center itself
+    private int offset = 0;
+
+    //Colors the pyramid
+    private Color color;
 
     void Start()
     {
@@ -68,43 +74,39 @@ public class SpawnEnvironment : MonoBehaviour
     // Function that spawns the pyramid.
     void CreatePyramid()
     {
-        GameObject[] stones = new GameObject[stonesRequired];
+        //Assigns all objects to parent "Pyramid"
+        GameObject WholePyramid = new GameObject("Pyramid");
+        //Assign random color for each height
+        color = new Color(Random.Range(0.1f, 1.0f), Random.Range(0.1f, 1.0f), Random.Range(0.1f, 1.0f), Random.Range(0.1f, 1.0f));
+        //Gets length to make pyramid
+        int length = lengthOfPyramid;
 
-        stopInfiniteLoop = 0;
-
-        for (int i = 0; i < stones.GetLength(0); ++i)
+        //Start construction and stops at desired height
+        for (int h = 0; h < heightOfPyramid; ++h)
         {
-            GameObject cube = GameObject.CreatePrimitive(PrimitiveType.Cube);
-            cube.transform.position = new Vector3(i + offset, height, 0);
-            //Completes a column
-            for (int j = 0; j < stones.GetLength(0); ++j)
+            //Constructs length, only a line of cubes
+            for (int l = 0 + offset; l < length; ++l)
             {
-                GameObject cubeColumn = GameObject.CreatePrimitive(PrimitiveType.Cube);
-                cubeColumn.transform.position = new Vector3(i + offset, height, j - 0.95f);
+                GameObject cube = GameObject.CreatePrimitive(PrimitiveType.Cube);
+                // The 0.5f added to the y value is to move the pyramid up so it does not clip into the plane
+                cube.transform.position = new Vector3(l, h + 0.5f, offset);
+                cube.GetComponent<Renderer>().material.color = color;
+                //Assign to parent
+                cube.transform.parent = WholePyramid.transform;
+                //Stretches the line of cubes to the equal width
+                for (int w = 0 + offset; w < length; ++w)
+                {
+                    GameObject line = GameObject.CreatePrimitive(PrimitiveType.Cube);
+                    line.GetComponent<Renderer>().material.color = color;
+                    line.transform.position = new Vector3(l, h + 0.5f, w);
+                    line.transform.parent = WholePyramid.transform;
+                }
             }
-            offset += 0.05f;
-            if (i == stones.GetLength(0) - 1 && stopInfiniteLoop < stones.GetLength(0))
-            {
-                height++;
-                i = 0;
-                Debug.Log("Reached");
-            }
-            ++stopInfiniteLoop;
+            //These are needed to make the pyramid shape
+            length--;
+            offset++;
+            //Random color for each height
+            color = new Color(Random.Range(0.1f, 1.0f), Random.Range(0.1f, 1.0f), Random.Range(0.1f, 1.0f), Random.Range(0.1f, 1.0f));
         }
-
-        /*offset = 0;
-        for (int i = 0; i < stones.GetLength(0) - 1; ++i)
-        {
-            GameObject cube = GameObject.CreatePrimitive(PrimitiveType.Cube);
-            cube.transform.position = new Vector3(i + offset + 0.25f, 1.5f, 0.25f);
-
-            //Completes a column
-            for (int j = 0; j < stones.GetLength(0); ++j)
-            {
-                GameObject cubeColumn = GameObject.CreatePrimitive(PrimitiveType.Cube);
-                cubeColumn.transform.position = new Vector3(i + offset + 0.25f, 1.5f, j - 0.95f + 0.25f);
-            }
-            offset += 0.05f;
-        } */
     }
 }
